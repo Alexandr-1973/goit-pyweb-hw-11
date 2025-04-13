@@ -1,0 +1,18 @@
+[project]
+name = "goit-pyweb-hw-11"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Alexandr-1973",email = "144156771+Alexandr-1973@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sqlalchemy (>=2.0.40,<3.0.0)",
+    "alembic (>=1.15.2,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
