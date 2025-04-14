@@ -1,12 +1,18 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from datetime import datetime, date, timedelta
 from src.database.models import Contact
 from src.schemas import ContactSchema, ContactResponseSchema
 
 
-async def get_contacts(limit: int, offset: int, db: AsyncSession):
-    stmt = select(Contact).offset(offset).limit(limit)
+async def get_contacts(limit: int, offset: int, use_get_filters: dict, db: AsyncSession):
+    filters_list=[getattr(Contact,k)==v for k,v in use_get_filters.items()]
+    stmt = select(Contact).filter(*filters_list).offset(offset).limit(limit)
+    contacts = await db.execute(stmt)
+    return contacts.scalars().all()
+
+async def get_birthdays_contacts(limit: int, offset: int, days: int, db: AsyncSession):
+    stmt = select(Contact).filter(Contact.birthday > date.today(), Contact.birthday<=date.today()+timedelta(days=days)).offset(offset).limit(limit)
     contacts = await db.execute(stmt)
     return contacts.scalars().all()
 
@@ -30,9 +36,8 @@ async def update_contact(contact_id: int, body: ContactSchema, db: AsyncSession)
     result = await db.execute(stmt)
     contact = result.scalar_one_or_none()
     if contact:
-        contact.title = body.title
-        contact.description = body.description
-        contact.completed = body.completed
+        for key, value in body.model_dump().items():
+            setattr(contact, key, value)
         await db.commit()
         await db.refresh(contact)
     return contact

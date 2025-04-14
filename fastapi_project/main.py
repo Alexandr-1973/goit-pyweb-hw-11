@@ -21,9 +21,9 @@ app.add_middleware(
 app.include_router(contacts.router, prefix="/api")
 
 
-@app.get("/")
-def index():
-    return {"message": "Todo Application"}
+# @app.get("/")
+# def index():
+#     return {"message": "Todo Application"}
 
 
 @app.get("/api/healthchecker")
@@ -34,7 +34,7 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
         result = result.fetchone()
         if result is None:
             raise HTTPException(status_code=500, detail="Database is not configured correctly")
-        return {"message": "Welcome to FastAPI!"}
+        return {"message": "Welcome to Contacts App!"}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Error connecting to the database")

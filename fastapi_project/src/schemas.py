@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 
@@ -8,7 +8,7 @@ class ContactSchema(BaseModel):
     last_name: str = Field(max_length=150)
     email: EmailStr
     phone_number: str = Field(max_length=30)
-    birthday : datetime
+    birthday : date
     # created_at : datetime
     add_info: Optional[str]=''
 
