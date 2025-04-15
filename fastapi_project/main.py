@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database.db import get_db
-from src.routes import contacts
+from fastapi_project.src.database.db import get_db
+from fastapi_project.src.routes import contacts
 
 app = FastAPI()
 
@@ -19,6 +19,10 @@ app.add_middleware(
 )
 
 app.include_router(contacts.router, prefix="/api")
+
+@app.get("/")
+def index():
+    return {"message": "Contacts Application"}
 
 @app.get("/api/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):

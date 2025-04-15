@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from src.conf.config import DB_URL
+from fastapi_project.src.conf.config import DB_URL
 
 engine = create_async_engine(DB_URL)
 

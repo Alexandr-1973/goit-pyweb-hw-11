@@ -5,8 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.database.models import Base
-from src.conf.config import DB_URL
+from fastapi_project.src.database.models import Base
+from fastapi_project.src.conf.config import DB_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

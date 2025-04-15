@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import date
-from src.database.models import Contact
-from src.schemas import ContactSchema, ContactResponseSchema
+from fastapi_project.src.database.models import Contact
+from fastapi_project.src.schemas import ContactSchema, ContactResponseSchema
 
 async def get_contacts(limit: int, offset: int, use_get_filters: dict, db: AsyncSession):
     filters_list=[getattr(Contact,k)==v for k,v in use_get_filters.items()]
