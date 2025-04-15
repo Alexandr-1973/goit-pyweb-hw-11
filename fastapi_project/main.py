@@ -20,12 +20,6 @@ app.add_middleware(
 
 app.include_router(contacts.router, prefix="/api")
 
-
-# @app.get("/")
-# def index():
-#     return {"message": "Todo Application"}
-
-
 @app.get("/api/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):
     try:

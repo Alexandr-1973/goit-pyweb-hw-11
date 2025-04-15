@@ -9,7 +9,6 @@ class ContactSchema(BaseModel):
     email: EmailStr
     phone_number: str = Field(max_length=30)
     birthday : date
-    # created_at : datetime
     add_info: Optional[str]=''
 
 

@@ -1,9 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, date, timedelta
+from datetime import date
 from src.database.models import Contact
 from src.schemas import ContactSchema, ContactResponseSchema
-
 
 async def get_contacts(limit: int, offset: int, use_get_filters: dict, db: AsyncSession):
     filters_list=[getattr(Contact,k)==v for k,v in use_get_filters.items()]
@@ -12,9 +11,18 @@ async def get_contacts(limit: int, offset: int, use_get_filters: dict, db: Async
     return contacts.scalars().all()
 
 async def get_birthdays_contacts(limit: int, offset: int, days: int, db: AsyncSession):
-    stmt = select(Contact).filter(Contact.birthday > date.today(), Contact.birthday<=date.today()+timedelta(days=days)).offset(offset).limit(limit)
+    stmt=select(Contact)
     contacts = await db.execute(stmt)
-    return contacts.scalars().all()
+    today = date.today()
+    upcoming_birthdays_list = []
+    for contact in contacts.scalars().all():
+        if contact.birthday:
+            birthday_this_year = contact.birthday.replace(year=today.year)
+            if birthday_this_year < today:
+                birthday_this_year = birthday_this_year.replace(year=today.year + 1)
+            if 0 <= (birthday_this_year - today).days <= days:
+                upcoming_birthdays_list.append(contact)
+    return upcoming_birthdays_list[offset:offset+limit]
 
 
 async def get_contact(contact_id: int, db: AsyncSession):
